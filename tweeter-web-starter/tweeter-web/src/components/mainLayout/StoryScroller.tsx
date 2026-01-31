@@ -60,7 +60,7 @@ const StoryScroller = () => {
         authToken!,
         displayedUser!.alias,
         PAGE_SIZE,
-        lastItem
+        lastItem,
       );
 
       setHasMoreItems(() => hasMore);
@@ -70,7 +70,7 @@ const StoryScroller = () => {
       displayToast(
         ToastType.Error,
         `Failed to load story items because of exception: ${error}`,
-        0
+        0,
       );
     }
   };
@@ -79,7 +79,7 @@ const StoryScroller = () => {
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,
-    lastItem: Status | null
+    lastItem: Status | null,
   ): Promise<[Status[], boolean]> => {
     // TODO: Replace with the result of calling server
     return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
@@ -103,7 +103,7 @@ const StoryScroller = () => {
       displayToast(
         ToastType.Error,
         `Failed to get user because of exception: ${error}`,
-        0
+        0,
       );
     }
   };
@@ -115,7 +115,7 @@ const StoryScroller = () => {
 
   const getUser = async (
     authToken: AuthToken,
-    alias: string
+    alias: string,
   ): Promise<User | null> => {
     // TODO: Replace with the result of calling server
     return FakeData.instance.findUserByAlias(alias);
@@ -135,6 +135,7 @@ const StoryScroller = () => {
             key={index}
             className="row mb-3 mx-0 px-0 border rounded bg-white"
           >
+            {/* This is where the code is duplicated */}
             <div className="col bg-light mx-0 px-0">
               <div className="container px-0">
                 <div className="row mx-0 px-0">
