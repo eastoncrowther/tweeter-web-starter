@@ -1,6 +1,6 @@
 import "./Register.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { UserInfoActionsContext } from "../../userInfo/UserInfoContexts";
 import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { AuthToken, FakeData, User } from "tweeter-shared";
 import { ToastActionsContext } from "../../toaster/ToastContexts";
 import { Buffer } from "buffer";
 import { ToastType } from "../../toaster/Toast";
+import AuthenticationFields from "../authenticationFields/AuthenticationFields";
 
 const Register = () => {
   const [firstName, setFirstName] = useState("");
@@ -36,12 +37,6 @@ const Register = () => {
     );
   };
 
-  const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
-    if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-      doRegister();
-    }
-  };
-
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     handleImageFile(file);
@@ -61,7 +56,7 @@ const Register = () => {
 
         const bytes: Uint8Array = Buffer.from(
           imageStringBase64BufferContents,
-          "base64"
+          "base64",
         );
 
         setImageBytes(bytes);
@@ -93,7 +88,7 @@ const Register = () => {
         alias,
         password,
         imageBytes,
-        imageFileExtension
+        imageFileExtension,
       );
 
       updateUserInfo(user, user, authToken, rememberMe);
@@ -102,7 +97,7 @@ const Register = () => {
       displayToast(
         ToastType.Error,
         `Failed to register user because of exception: ${error}`,
-        0
+        0,
       );
     } finally {
       setIsLoading(false);
@@ -115,7 +110,7 @@ const Register = () => {
     alias: string,
     password: string,
     userImageBytes: Uint8Array,
-    imageFileExtension: string
+    imageFileExtension: string,
   ): Promise<[User, AuthToken]> => {
     // Not neded now, but will be needed when you make the request to the server in milestone 3
     const imageStringBase64: string =
@@ -134,59 +129,56 @@ const Register = () => {
   const inputFieldFactory = () => {
     return (
       <>
-        <div className="form-floating">
-          <input
-            type="text"
-            className="form-control"
-            size={50}
-            id="firstNameInput"
-            placeholder="First Name"
-            onKeyDown={registerOnEnter}
-            onChange={(event) => setFirstName(event.target.value)}
-          />
-          <label htmlFor="firstNameInput">First Name</label>
-        </div>
-        <div className="form-floating">
-          <input
-            type="text"
-            className="form-control"
-            size={50}
-            id="lastNameInput"
-            placeholder="Last Name"
-            onKeyDown={registerOnEnter}
-            onChange={(event) => setLastName(event.target.value)}
-          />
-          <label htmlFor="lastNameInput">Last Name</label>
-        </div>
-        <div className="form-floating">
-          <input
-            type="text"
-            className="form-control"
-            size={50}
-            id="aliasInput"
-            placeholder="name@example.com"
-            onKeyDown={registerOnEnter}
-            onChange={(event) => setAlias(event.target.value)}
-          />
-          <label htmlFor="aliasInput">Alias</label>
-        </div>
-        <div className="form-floating">
-          <input
-            type="password"
-            className="form-control"
-            id="passwordInput"
-            placeholder="Password"
-            onKeyDown={registerOnEnter}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <label htmlFor="passwordInput">Password</label>
-        </div>
+        <AuthenticationFields
+          id="firstNameInput"
+          label="First Name"
+          placeholder="First Name"
+          onChange={setFirstName}
+          isLoading={isLoading}
+          action={doRegister}
+          checkSubmitButtonStatus={checkSubmitButtonStatus}
+        />
+
+        <AuthenticationFields
+          id="lastNameInput"
+          label="Last Name"
+          placeholder="Last Name"
+          onChange={setLastName}
+          isLoading={isLoading}
+          action={doRegister}
+          checkSubmitButtonStatus={checkSubmitButtonStatus}
+        />
+
+        <AuthenticationFields
+          id="aliasInput"
+          label="Alias"
+          placeholder="name@example.com"
+          onChange={setAlias}
+          isLoading={isLoading}
+          action={doRegister}
+          checkSubmitButtonStatus={checkSubmitButtonStatus}
+        />
+
+        <AuthenticationFields
+          id="passwordInput"
+          label="Password"
+          type="password"
+          placeholder="Password"
+          onChange={setPassword}
+          isLoading={isLoading}
+          action={doRegister}
+          checkSubmitButtonStatus={checkSubmitButtonStatus}
+        />
         <div className="form-floating mb-3">
           <input
             type="file"
             className="d-inline-block py-5 px-4 form-control bottom"
             id="imageFileInput"
-            onKeyDown={registerOnEnter}
+            onKeyDown={(event: React.KeyboardEvent<HTMLElement>) => {
+              if (event.key == "Enter" && !checkSubmitButtonStatus()) {
+                doRegister();
+              }
+            }}
             onChange={handleFileChange}
           />
           {imageUrl.length > 0 && (
