@@ -3,29 +3,47 @@ import {
   UserInfoContext,
   UserInfoActionsContext,
 } from "../userInfo/UserInfoContexts";
-import { AuthToken, FakeData, Status, User } from "tweeter-shared";
 import { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { AuthToken, FakeData, User } from "tweeter-shared";
 import { ToastActionsContext } from "../toaster/ToastContexts";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ToastType } from "../toaster/Toast";
-import StatusItem from "../statusItem/StatusItem";
+import UserItem from "../userItem/UserItem";
 
 export const PAGE_SIZE = 10;
 
-const StoryScroller = () => {
-  const { displayToast } = useContext(ToastActionsContext);
-  const [items, setItems] = useState<Status[]>([]);
-  const [hasMoreItems, setHasMoreItems] = useState(true);
-  const [lastItem, setLastItem] = useState<Status | null>(null);
-  const navigate = useNavigate();
+interface Props {
+  itemDescription: string;
+  featureUrl: string;
+  loadMore: (
+    authToken: AuthToken,
+    userAlias: string,
+    pageSize: number,
+    lastItem: User | null,
+  ) => Promise<[User[], boolean]>;
+}
 
-  const addItems = (newItems: Status[]) =>
+const UserItemScroller = (props: Props) => {
+  const { displayToast } = useContext(ToastActionsContext);
+  const [items, setItems] = useState<User[]>([]);
+  const [hasMoreItems, setHasMoreItems] = useState(true);
+  const [lastItem, setLastItem] = useState<User | null>(null);
+
+  const addItems = (newItems: User[]) =>
     setItems((previousItems) => [...previousItems, ...newItems]);
 
   const { displayedUser, authToken } = useContext(UserInfoContext);
   const { setDisplayedUser } = useContext(UserInfoActionsContext);
   const { displayedUser: displayedUserAliasParam } = useParams();
+
+  const getUser = async (
+    authToken: AuthToken,
+    alias: string,
+  ): Promise<User | null> => {
+    // TODO: Replace with the result of calling server
+    return FakeData.instance.findUserByAlias(alias);
+  };
 
   // Update the displayed user context variable whenever the displayedUser url parameter changes. This allows browser forward and back buttons to work correctly.
   useEffect(() => {
@@ -54,9 +72,9 @@ const StoryScroller = () => {
     setHasMoreItems(() => true);
   };
 
-  const loadMoreItems = async (lastItem: Status | null) => {
+  const loadMoreItems = async (lastItem: User | null) => {
     try {
-      const [newItems, hasMore] = await loadMoreStoryItems(
+      const [newItems, hasMore] = await props.loadMore(
         authToken!,
         displayedUser!.alias,
         PAGE_SIZE,
@@ -69,28 +87,10 @@ const StoryScroller = () => {
     } catch (error) {
       displayToast(
         ToastType.Error,
-        `Failed to load story items because of exception: ${error}`,
+        `Failed to load ${props.itemDescription} because of exception: ${error}`,
         0,
       );
     }
-  };
-
-  const loadMoreStoryItems = async (
-    authToken: AuthToken,
-    userAlias: string,
-    pageSize: number,
-    lastItem: Status | null,
-  ): Promise<[Status[], boolean]> => {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
-  };
-
-  const getUser = async (
-    authToken: AuthToken,
-    alias: string,
-  ): Promise<User | null> => {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.findUserByAlias(alias);
   };
 
   return (
@@ -107,7 +107,7 @@ const StoryScroller = () => {
             key={index}
             className="row mb-3 mx-0 px-0 border rounded bg-white"
           >
-            <StatusItem status={item} featurePath="/story" />
+            <UserItem user={item} featurePath={props.featureUrl} />
           </div>
         ))}
       </InfiniteScroll>
@@ -115,4 +115,4 @@ const StoryScroller = () => {
   );
 };
 
-export default StoryScroller;
+export default UserItemScroller;
