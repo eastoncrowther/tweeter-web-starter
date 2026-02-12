@@ -1,7 +1,11 @@
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthToken, FakeData, User } from "tweeter-shared";
 import { useMessageActions } from "../toaster/MessageHooks";
 import { useUserInfo, useUserInfoActions } from "../userInfo/UserInfoHooks";
+import {
+  UserNavigationPresenter,
+  UserNavigationView,
+} from "../../presenter/UserNavigationPresenter";
 
 const useUserNavigation = () => {
   const { displayErrorMessage } = useMessageActions();
@@ -9,36 +13,29 @@ const useUserNavigation = () => {
   const { displayedUser, authToken } = useUserInfo();
   const navigate = useNavigate();
 
+  const listener: UserNavigationView = useMemo(() => {
+    return {
+      setDisplayedUser: setDisplayedUser,
+      navigateTo: navigate,
+      displayErrorMessage: displayErrorMessage,
+    };
+  }, [setDisplayedUser, navigate, displayErrorMessage]);
+
+  const presenter = useMemo(() => {
+    return new UserNavigationPresenter(listener);
+  }, [listener]);
+
   const navigateToUser = async (
     event: React.MouseEvent,
     pathPrefix: string,
   ): Promise<void> => {
     event.preventDefault();
-    try {
-      const alias = extractAlias(event.target.toString());
-      const toUser = await getUser(authToken!, alias);
-
-      if (toUser) {
-        if (!toUser.equals(displayedUser!)) {
-          setDisplayedUser(toUser);
-          navigate(`${pathPrefix}/${toUser.alias}`);
-        }
-      }
-    } catch (error) {
-      displayErrorMessage(`Failed to get user because of exception: ${error}`);
-    }
-  };
-
-  const extractAlias = (value: string): string => {
-    const index = value.indexOf("@");
-    return value.substring(index);
-  };
-
-  const getUser = async (
-    authToken: AuthToken,
-    alias: string,
-  ): Promise<User | null> => {
-    return FakeData.instance.findUserByAlias(alias);
+    await presenter.navigateToUser(
+      authToken!,
+      displayedUser,
+      event.target.toString(),
+      pathPrefix,
+    );
   };
 
   return { navigateToUser };
