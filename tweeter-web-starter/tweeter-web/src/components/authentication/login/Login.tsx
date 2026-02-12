@@ -1,12 +1,14 @@
 import "./Login.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import { AuthToken, FakeData, User } from "tweeter-shared";
 import AuthenticationFields from "../authenticationFields/AuthenticationFields";
 import { useMessageActions } from "../../toaster/MessageHooks";
 import { useUserInfoActions } from "../../userInfo/UserInfoHooks";
+import { AuthView } from "../../../presenter/AuthPresenter";
+import { LoginPresenter } from "../../../presenter/LoginPresenter";
 
 interface Props {
   originalUrl?: string;
@@ -22,30 +24,23 @@ const Login = (props: Props) => {
   const { updateUserInfo } = useUserInfoActions();
   const { displayErrorMessage } = useMessageActions();
 
+  const listener: AuthView = {
+    setIsLoading: setIsLoading,
+    displayErrorMessage: displayErrorMessage,
+    navigate: navigate,
+    updateUserInfo: updateUserInfo,
+  };
+
+  const presenter = useMemo(() => {
+    return new LoginPresenter(listener);
+  }, [listener]);
+
   const checkSubmitButtonStatus = (): boolean => {
     return !alias || !password;
   };
 
   const doLogin = async () => {
-    try {
-      setIsLoading(true);
-
-      const [user, authToken] = await login(alias, password);
-
-      updateUserInfo(user, user, authToken, rememberMe);
-
-      if (!!props.originalUrl) {
-        navigate(props.originalUrl);
-      } else {
-        navigate(`/feed/${user.alias}`);
-      }
-    } catch (error) {
-      displayErrorMessage(
-        `Failed to log user in because of exception: ${error}`,
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    await presenter.doLogin(alias, password, rememberMe, props.originalUrl);
   };
 
   const login = async (

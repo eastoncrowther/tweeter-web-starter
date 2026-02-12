@@ -9,24 +9,7 @@ const useUserNavigation = () => {
   const { displayedUser, authToken } = useUserInfo();
   const navigate = useNavigate();
 
-  const navigateToUser = async (event: React.MouseEvent): Promise<void> => {
-    event.preventDefault();
-
-    try {
-      const alias = extractAlias(event.target.toString());
-      const toUser = await getUser(authToken!, alias);
-
-      if (toUser) {
-        if (!toUser.equals(displayedUser!)) {
-          setDisplayedUser(toUser);
-        }
-      }
-    } catch (error) {
-      displayErrorMessage(`Failed to get user because of exception: ${error}`);
-    }
-  };
-
-  const userNavigationListener = async (
+  const navigateToUser = async (
     event: React.MouseEvent,
     pathPrefix: string,
   ): Promise<void> => {
@@ -58,7 +41,7 @@ const useUserNavigation = () => {
     return FakeData.instance.findUserByAlias(alias);
   };
 
-  return { navigateToUser: userNavigationListener };
+  return { navigateToUser };
 };
 
 export default useUserNavigation;
