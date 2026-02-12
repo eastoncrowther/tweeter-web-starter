@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
-import { AuthToken, FakeData, User } from "tweeter-shared";
 import AuthenticationFields from "../authenticationFields/AuthenticationFields";
 import { useMessageActions } from "../../toaster/MessageHooks";
 import { useUserInfoActions } from "../../userInfo/UserInfoHooks";
@@ -41,20 +40,6 @@ const Login = (props: Props) => {
 
   const doLogin = async () => {
     await presenter.doLogin(alias, password, rememberMe, props.originalUrl);
-  };
-
-  const login = async (
-    alias: string,
-    password: string,
-  ): Promise<[User, AuthToken]> => {
-    // TODO: Replace with the result of calling the server
-    const user = FakeData.instance.firstUser;
-
-    if (user === null) {
-      throw new Error("Invalid alias or password");
-    }
-
-    return [user, FakeData.instance.authToken];
   };
 
   const inputFieldFactory = () => {
