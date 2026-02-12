@@ -1,8 +1,8 @@
 import "./PostStatus.css";
-import { useState } from "react";
-import { AuthToken, Status } from "tweeter-shared";
+import { useMemo, useRef, useState } from "react";
 import { useMessageActions } from "../toaster/MessageHooks";
 import { useUserInfo } from "../userInfo/UserInfoHooks";
+import { PostPresenter, PostView } from "../../presenter/PostPresenter";
 
 const PostStatus = () => {
   const { displayInfoMessage, displayErrorMessage, deleteMessage } =
@@ -12,39 +12,35 @@ const PostStatus = () => {
   const [post, setPost] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const lastInfoMessageId = useRef<string>("");
+
+  const listener: PostView = useMemo(() => {
+    return {
+      setIsLoading: setIsLoading,
+      setPost: setPost,
+      displayErrorMessage: displayErrorMessage,
+      displayInfoMessage: (message: string, duration: number) => {
+        const messageId = displayInfoMessage(message, duration);
+        if (duration === 0) {
+          lastInfoMessageId.current = messageId;
+        }
+      },
+      clearLastInfoMessage: () => {
+        if (lastInfoMessageId.current) {
+          deleteMessage(lastInfoMessageId.current);
+          lastInfoMessageId.current = "";
+        }
+      },
+    };
+  }, [displayInfoMessage, displayErrorMessage, deleteMessage]);
+
+  const presenter = useMemo(() => {
+    return new PostPresenter(listener);
+  }, [listener]);
+
   const submitPost = async (event: React.MouseEvent) => {
     event.preventDefault();
-
-    var postingStatusToastId = "";
-
-    try {
-      setIsLoading(true);
-      postingStatusToastId = displayInfoMessage("Posting status...", 0);
-
-      const status = new Status(post, currentUser!, Date.now());
-
-      await postStatus(authToken!, status);
-
-      setPost("");
-      displayInfoMessage("Status posted!", 2000);
-    } catch (error) {
-      displayErrorMessage(
-        `Failed to post the status because of exception: ${error}`,
-      );
-    } finally {
-      deleteMessage(postingStatusToastId);
-      setIsLoading(false);
-    }
-  };
-
-  const postStatus = async (
-    authToken: AuthToken,
-    newStatus: Status,
-  ): Promise<void> => {
-    // Pause so we can see the logging out message. Remove when connected to the server
-    await new Promise((f) => setTimeout(f, 2000));
-
-    // TODO: Call the server to post the status
+    await presenter.submitPost(post, currentUser!, authToken!);
   };
 
   const clearPost = (event: React.MouseEvent) => {
