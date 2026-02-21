@@ -12,21 +12,19 @@ export class LoginPresenter extends AuthPresenter {
     originalUrl?: string,
   ) {
     try {
-      this.view.setIsLoading(true);
+      await this.doFailureReportingOperation(async () => {
+        this.view.setIsLoading(true);
 
-      const [user, authToken] = await this.authService.login(alias, password);
+        const [user, authToken] = await this.authService.login(alias, password);
 
-      this.view.updateUserInfo(user, user, authToken, rememberMe);
+        this.view.updateUserInfo(user, user, authToken, rememberMe);
 
-      if (!!originalUrl) {
-        this.view.navigate(originalUrl);
-      } else {
-        this.view.navigate(`/feed/${user.alias}`);
-      }
-    } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to log user in because of exception: ${error}`,
-      );
+        if (!!originalUrl) {
+          this.view.navigate(originalUrl);
+        } else {
+          this.view.navigate(`/feed/${user.alias}`);
+        }
+      }, "log user in");
     } finally {
       this.view.setIsLoading(false);
     }

@@ -15,26 +15,24 @@ export class RegisterPresenter extends AuthPresenter {
     rememberMe: boolean,
   ) {
     try {
-      this.view.setIsLoading(true);
+      await this.doFailureReportingOperation(async () => {
+        this.view.setIsLoading(true);
 
-      const imageFileExtension = this.getFileExtension(imageFile);
-      const imageBytes = await this.getFileBytes(imageFile);
+        const imageFileExtension = this.getFileExtension(imageFile);
+        const imageBytes = await this.getFileBytes(imageFile);
 
-      const [user, authToken] = await this.authService.register(
-        firstName,
-        lastName,
-        alias,
-        password,
-        imageBytes,
-        imageFileExtension,
-      );
+        const [user, authToken] = await this.authService.register(
+          firstName,
+          lastName,
+          alias,
+          password,
+          imageBytes,
+          imageFileExtension,
+        );
 
-      this.view.updateUserInfo(user, user, authToken, rememberMe);
-      this.view.navigate(`/feed/${user.alias}`);
-    } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to register user because of exception: ${error}`,
-      );
+        this.view.updateUserInfo(user, user, authToken, rememberMe);
+        this.view.navigate(`/feed/${user.alias}`);
+      }, "register user");
     } finally {
       this.view.setIsLoading(false);
     }

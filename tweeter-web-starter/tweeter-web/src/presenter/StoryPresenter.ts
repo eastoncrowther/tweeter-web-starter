@@ -17,7 +17,7 @@ export class StoryPresenter extends StatusItemPresenter {
     userAlias: string,
     itemDescription: string,
   ) {
-    try {
+    this.doFailureReportingOperation(async () => {
       const [newItems, hasMore] =
         await this.service.loadMoreStatusScrollerItems(
           authToken,
@@ -30,10 +30,6 @@ export class StoryPresenter extends StatusItemPresenter {
       this.lastItem =
         newItems.length > 0 ? newItems[newItems.length - 1] : null;
       this.view.addItems(newItems);
-    } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to load ${itemDescription} items because of exception: ${error}`,
-      );
-    }
+    }, `load ${itemDescription} items`);
   }
 }
