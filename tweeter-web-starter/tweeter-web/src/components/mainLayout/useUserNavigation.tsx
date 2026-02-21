@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMessageActions } from "../toaster/MessageHooks";
 import { useUserInfo, useUserInfoActions } from "../userInfo/UserInfoHooks";
@@ -13,24 +13,23 @@ const useUserNavigation = () => {
   const { displayedUser, authToken } = useUserInfo();
   const navigate = useNavigate();
 
-  const listener: UserNavigationView = useMemo(() => {
-    return {
-      setDisplayedUser: setDisplayedUser,
-      navigateTo: navigate,
-      displayErrorMessage: displayErrorMessage,
-    };
-  }, [setDisplayedUser, navigate, displayErrorMessage]);
+  const listener: UserNavigationView = {
+    setDisplayedUser: setDisplayedUser,
+    navigateTo: navigate,
+    displayErrorMessage: displayErrorMessage,
+  };
 
-  const presenter = useMemo(() => {
-    return new UserNavigationPresenter(listener);
-  }, [listener]);
+  const presenterRef = useRef<UserNavigationPresenter | null>(null);
+  if (!presenterRef.current) {
+    presenterRef.current = new UserNavigationPresenter(listener);
+  }
 
   const navigateToUser = async (
     event: React.MouseEvent,
     pathPrefix: string,
   ): Promise<void> => {
     event.preventDefault();
-    await presenter.navigateToUser(
+    await presenterRef.current!.navigateToUser(
       authToken!,
       displayedUser,
       event.target.toString(),

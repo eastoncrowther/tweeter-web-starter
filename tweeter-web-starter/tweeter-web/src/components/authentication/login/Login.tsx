@@ -1,6 +1,6 @@
 import "./Login.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { useMemo, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import AuthenticationFields from "../authenticationFields/AuthenticationFields";
@@ -29,17 +29,22 @@ const Login = (props: Props) => {
     navigate: navigate,
     updateUserInfo: updateUserInfo,
   };
-
-  const presenter = useMemo(() => {
-    return new LoginPresenter(listener);
-  }, [listener]);
+  const presenterRef = useRef<LoginPresenter | null>(null);
+  if (!presenterRef.current) {
+    presenterRef.current = new LoginPresenter(listener);
+  }
 
   const checkSubmitButtonStatus = (): boolean => {
     return !alias || !password;
   };
 
   const doLogin = async () => {
-    await presenter.doLogin(alias, password, rememberMe, props.originalUrl);
+    await presenterRef.current!.doLogin(
+      alias,
+      password,
+      rememberMe,
+      props.originalUrl,
+    );
   };
 
   const inputFieldFactory = () => {

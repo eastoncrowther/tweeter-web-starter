@@ -21,7 +21,9 @@ export class StatusService {
     return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
   }
 
-  public async loadMoreStatusScrollerItems(
+  
+  // TODO: DELETE THIS FUNCTION: IT IS A DUPLICATE OF EITHER STORY OR FEED ITEMS
+  public async loadMoreStatusScrollerItems( 
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,

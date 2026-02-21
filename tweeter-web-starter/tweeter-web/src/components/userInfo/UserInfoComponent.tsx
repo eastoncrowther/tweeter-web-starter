@@ -1,5 +1,5 @@
 import "./UserInfoComponent.css";
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMessageActions } from "../toaster/MessageHooks";
 import { useUserInfo, useUserInfoActions } from "./UserInfoHooks";
@@ -38,40 +38,43 @@ const UserInfo = () => {
 
   const lastInfoMessageId = useRef<string>("");
 
-  const listener: UserInfoView = useMemo(() => {
-    return {
-      setIsFollower,
-      setFolloweeCount,
-      setFollowerCount,
-      setIsLoading,
-      displayErrorMessage: (message: string) =>
-        displayErrorMessageRef.current(message),
-      displayInfoMessage: (message: string, duration: number) => {
-        const messageId = displayInfoMessageRef.current(message, duration);
-        if (duration === 0) {
-          lastInfoMessageId.current = messageId;
-        }
-      },
-      clearLastInfoMessage: () => {
-        if (lastInfoMessageId.current) {
-          deleteMessageRef.current(lastInfoMessageId.current);
-          lastInfoMessageId.current = "";
-        }
-      },
-    };
-  }, []);
+  const listener: UserInfoView = {
+    setIsFollower,
+    setFolloweeCount,
+    setFollowerCount,
+    setIsLoading,
+    displayErrorMessage: (message: string) =>
+      displayErrorMessageRef.current(message),
+    displayInfoMessage: (message: string, duration: number) => {
+      const messageId = displayInfoMessageRef.current(message, duration);
+      if (duration === 0) {
+        lastInfoMessageId.current = messageId;
+      }
+    },
+    clearLastInfoMessage: () => {
+      if (lastInfoMessageId.current) {
+        deleteMessageRef.current(lastInfoMessageId.current);
+        lastInfoMessageId.current = "";
+      }
+    },
+  };
 
-  const presenter = useMemo(() => {
-    return new UserInfoPresenter(listener);
-  }, [listener]);
+  const presenterRef = useRef<UserInfoPresenter | null>(null);
+  if (!presenterRef.current) {
+    presenterRef.current = new UserInfoPresenter(listener);
+  }
 
   useEffect(() => {
     if (displayedUser && currentUser && authToken) {
-      presenter.setIsFollowerStatus(authToken, currentUser, displayedUser);
-      presenter.setNumbFollowees(authToken, displayedUser);
-      presenter.setNumbFollowers(authToken, displayedUser);
+      presenterRef.current!.setIsFollowerStatus(
+        authToken,
+        currentUser,
+        displayedUser,
+      );
+      presenterRef.current!.setNumbFollowees(authToken, displayedUser);
+      presenterRef.current!.setNumbFollowers(authToken, displayedUser);
     }
-  }, [displayedUser, currentUser, authToken, presenter]);
+  }, [displayedUser, currentUser, authToken, presenterRef]);
 
   const switchToLoggedInUser = (event: React.MouseEvent): void => {
     event.preventDefault();
@@ -88,14 +91,17 @@ const UserInfo = () => {
     event: React.MouseEvent,
   ): Promise<void> => {
     event.preventDefault();
-    await presenter.followDisplayedUser(authToken!, displayedUser!);
+    await presenterRef.current!.followDisplayedUser(authToken!, displayedUser!);
   };
 
   const unfollowDisplayedUser = async (
     event: React.MouseEvent,
   ): Promise<void> => {
     event.preventDefault();
-    await presenter.unfollowDisplayedUser(authToken!, displayedUser!);
+    await presenterRef.current!.unfollowDisplayedUser(
+      authToken!,
+      displayedUser!,
+    );
   };
 
   return (

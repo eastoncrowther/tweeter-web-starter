@@ -1,5 +1,5 @@
 import "./PostStatus.css";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useMessageActions } from "../toaster/MessageHooks";
 import { useUserInfo } from "../userInfo/UserInfoHooks";
 import { PostPresenter, PostView } from "../../presenter/PostPresenter";
@@ -14,33 +14,32 @@ const PostStatus = () => {
 
   const lastInfoMessageId = useRef<string>("");
 
-  const listener: PostView = useMemo(() => {
-    return {
-      setIsLoading: setIsLoading,
-      setPost: setPost,
-      displayErrorMessage: displayErrorMessage,
-      displayInfoMessage: (message: string, duration: number) => {
-        const messageId = displayInfoMessage(message, duration);
-        if (duration === 0) {
-          lastInfoMessageId.current = messageId;
-        }
-      },
-      clearLastInfoMessage: () => {
-        if (lastInfoMessageId.current) {
-          deleteMessage(lastInfoMessageId.current);
-          lastInfoMessageId.current = "";
-        }
-      },
-    };
-  }, [displayInfoMessage, displayErrorMessage, deleteMessage]);
+  const listener: PostView = {
+    setIsLoading: setIsLoading,
+    setPost: setPost,
+    displayErrorMessage: displayErrorMessage,
+    displayInfoMessage: (message: string, duration: number) => {
+      const messageId = displayInfoMessage(message, duration);
+      if (duration === 0) {
+        lastInfoMessageId.current = messageId;
+      }
+    },
+    clearLastInfoMessage: () => {
+      if (lastInfoMessageId.current) {
+        deleteMessage(lastInfoMessageId.current);
+        lastInfoMessageId.current = "";
+      }
+    },
+  };
 
-  const presenter = useMemo(() => {
-    return new PostPresenter(listener);
-  }, [listener]);
+  const presenterRef = useRef<PostPresenter | null>(null);
+  if (!presenterRef.current) {
+    presenterRef.current = new PostPresenter(listener);
+  }
 
   const submitPost = async (event: React.MouseEvent) => {
     event.preventDefault();
-    await presenter.submitPost(post, currentUser!, authToken!);
+    await presenterRef.current!.submitPost(post, currentUser!, authToken!);
   };
 
   const clearPost = (event: React.MouseEvent) => {
