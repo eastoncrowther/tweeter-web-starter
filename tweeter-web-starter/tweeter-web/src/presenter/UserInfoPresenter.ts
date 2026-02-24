@@ -1,14 +1,12 @@
 import { AuthToken, User } from "tweeter-shared";
 import { FollowService } from "../model.service/FollowService";
-import { Presenter, View } from "./Presenter";
+import { MessageView, Presenter } from "./Presenter";
 
-export interface UserInfoView extends View {
+export interface UserInfoView extends MessageView {
   setIsFollower: (isFollower: boolean) => void;
   setFolloweeCount: (count: number) => void;
   setFollowerCount: (count: number) => void;
   setIsLoading: (isLoading: boolean) => void;
-  displayInfoMessage: (message: string, duration: number) => void;
-  clearLastInfoMessage: () => void;
 }
 
 export class UserInfoPresenter extends Presenter<UserInfoView> {
@@ -63,10 +61,15 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
     authToken: AuthToken,
     displayedUser: User,
   ): Promise<void> {
+    let messageId: string | undefined;
+
     try {
       await this.doFailureReportingOperation(async () => {
         this.view.setIsLoading(true);
-        this.view.displayInfoMessage(`Following ${displayedUser.name}...`, 0);
+        messageId = this.view.displayInfoMessage(
+          `Following ${displayedUser.name}...`,
+          0,
+        );
 
         const [followerCount, followeeCount] = await this.service.follow(
           authToken,
@@ -78,7 +81,9 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
         this.view.setFolloweeCount(followeeCount);
       }, "follow user");
     } finally {
-      this.view.clearLastInfoMessage();
+      if (messageId) {
+        this.view.deleteMessage(messageId);
+      }
       this.view.setIsLoading(false);
     }
   }
@@ -87,10 +92,15 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
     authToken: AuthToken,
     displayedUser: User,
   ): Promise<void> {
+    let messageId: string | undefined;
+
     try {
       await this.doFailureReportingOperation(async () => {
         this.view.setIsLoading(true);
-        this.view.displayInfoMessage(`Unfollowing ${displayedUser.name}...`, 0);
+        messageId = this.view.displayInfoMessage(
+          `Unfollowing ${displayedUser.name}...`,
+          0,
+        );
 
         const [followerCount, followeeCount] = await this.service.unfollow(
           authToken,
@@ -102,7 +112,9 @@ export class UserInfoPresenter extends Presenter<UserInfoView> {
         this.view.setFolloweeCount(followeeCount);
       }, "unfollow user");
     } finally {
-      this.view.clearLastInfoMessage();
+      if (messageId) {
+        this.view.deleteMessage(messageId);
+      }
       this.view.setIsLoading(false);
     }
   }

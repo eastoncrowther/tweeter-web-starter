@@ -1,6 +1,6 @@
 import { AuthToken, Status, FakeData } from "tweeter-shared";
 
-export class StatusService {
+export class StatusService implements Service {
   public async loadMoreFeedItems(
     authToken: AuthToken,
     userAlias: string,
@@ -21,9 +21,8 @@ export class StatusService {
     return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
   }
 
-  
   // TODO: DELETE THIS FUNCTION: IT IS A DUPLICATE OF EITHER STORY OR FEED ITEMS
-  public async loadMoreStatusScrollerItems( 
+  public async loadMoreStatusScrollerItems(
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,

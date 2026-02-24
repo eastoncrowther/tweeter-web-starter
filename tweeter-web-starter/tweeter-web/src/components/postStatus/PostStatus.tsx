@@ -12,24 +12,12 @@ const PostStatus = () => {
   const [post, setPost] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const lastInfoMessageId = useRef<string>("");
-
   const listener: PostView = {
     setIsLoading: setIsLoading,
     setPost: setPost,
     displayErrorMessage: displayErrorMessage,
-    displayInfoMessage: (message: string, duration: number) => {
-      const messageId = displayInfoMessage(message, duration);
-      if (duration === 0) {
-        lastInfoMessageId.current = messageId;
-      }
-    },
-    clearLastInfoMessage: () => {
-      if (lastInfoMessageId.current) {
-        deleteMessage(lastInfoMessageId.current);
-        lastInfoMessageId.current = "";
-      }
-    },
+    displayInfoMessage,
+    deleteMessage,
   };
 
   const presenterRef = useRef<PostPresenter | null>(null);

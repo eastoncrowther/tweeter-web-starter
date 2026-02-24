@@ -36,8 +36,6 @@ const UserInfo = () => {
     setDisplayedUser(currentUser!);
   }
 
-  const lastInfoMessageId = useRef<string>("");
-
   const listener: UserInfoView = {
     setIsFollower,
     setFolloweeCount,
@@ -45,18 +43,9 @@ const UserInfo = () => {
     setIsLoading,
     displayErrorMessage: (message: string) =>
       displayErrorMessageRef.current(message),
-    displayInfoMessage: (message: string, duration: number) => {
-      const messageId = displayInfoMessageRef.current(message, duration);
-      if (duration === 0) {
-        lastInfoMessageId.current = messageId;
-      }
-    },
-    clearLastInfoMessage: () => {
-      if (lastInfoMessageId.current) {
-        deleteMessageRef.current(lastInfoMessageId.current);
-        lastInfoMessageId.current = "";
-      }
-    },
+    displayInfoMessage: (message: string, duration: number) =>
+      displayInfoMessageRef.current(message, duration),
+    deleteMessage: (messageId: string) => deleteMessageRef.current(messageId),
   };
 
   const presenterRef = useRef<UserInfoPresenter | null>(null);
