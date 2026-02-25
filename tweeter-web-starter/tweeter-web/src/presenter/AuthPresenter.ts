@@ -1,6 +1,6 @@
 import { AuthToken, User } from "tweeter-shared";
-import { AuthService } from "../model.service/AuthService";
 import { Presenter, View } from "./Presenter";
+import { UserService } from "../model.service/UserService";
 
 export interface AuthView extends View {
   setIsLoading: (isLoading: boolean) => void;
@@ -14,14 +14,33 @@ export interface AuthView extends View {
 }
 
 export abstract class AuthPresenter extends Presenter<AuthView> {
-  private _authService: AuthService;
+  private _service: UserService = new UserService();
 
-  protected constructor(view: AuthView) {
-    super(view);
-    this._authService = new AuthService();
+  protected get service(): UserService {
+    return this._service;
   }
+  protected async doAuthOperation(
+    operation: () => Promise<[User, AuthToken]>,
+    operationDescription: string,
+    rememberMe: boolean,
+    navigateUrl?: string,
+  ) {
+    try {
+      this.view.setIsLoading(true);
 
-  protected get authService(): AuthService {
-    return this._authService;
+      await this.doFailureReportingOperation(async () => {
+        const [user, authToken] = await operation();
+
+        this.view.updateUserInfo(user, user, authToken, rememberMe);
+
+        if (navigateUrl) {
+          this.view.navigate(navigateUrl);
+        } else {
+          this.view.navigate(`/feed/${user.alias}`);
+        }
+      }, operationDescription);
+    } finally {
+      this.view.setIsLoading(false);
+    }
   }
 }

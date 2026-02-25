@@ -1,11 +1,7 @@
 import { Buffer } from "buffer";
-import { AuthPresenter, AuthView } from "./AuthPresenter";
+import { AuthPresenter } from "./AuthPresenter";
 
 export class RegisterPresenter extends AuthPresenter {
-  public constructor(view: AuthView) {
-    super(view);
-  }
-
   public async doRegister(
     firstName: string,
     lastName: string,
@@ -14,14 +10,12 @@ export class RegisterPresenter extends AuthPresenter {
     imageFile: File,
     rememberMe: boolean,
   ) {
-    try {
-      await this.doFailureReportingOperation(async () => {
-        this.view.setIsLoading(true);
-
+    await this.doAuthOperation(
+      async () => {
         const imageFileExtension = this.getFileExtension(imageFile);
         const imageBytes = await this.getFileBytes(imageFile);
 
-        const [user, authToken] = await this.authService.register(
+        return this.service.register(
           firstName,
           lastName,
           alias,
@@ -29,13 +23,10 @@ export class RegisterPresenter extends AuthPresenter {
           imageBytes,
           imageFileExtension,
         );
-
-        this.view.updateUserInfo(user, user, authToken, rememberMe);
-        this.view.navigate(`/feed/${user.alias}`);
-      }, "register user");
-    } finally {
-      this.view.setIsLoading(false);
-    }
+      },
+      "register user",
+      rememberMe,
+    );
   }
 
   private getFileExtension(file: File): string {

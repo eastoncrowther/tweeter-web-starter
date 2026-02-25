@@ -8,12 +8,7 @@ export interface UserNavigationView extends View {
 }
 
 export class UserNavigationPresenter extends Presenter<UserNavigationView> {
-  private _userService: UserService;
-
-  public constructor(view: UserNavigationView) {
-    super(view);
-    this._userService = new UserService();
-  }
+  private _userService: UserService = new UserService();
 
   protected get userService(): UserService {
     return this._userService;
