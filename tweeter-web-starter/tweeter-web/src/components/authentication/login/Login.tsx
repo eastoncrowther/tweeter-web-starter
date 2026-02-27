@@ -1,6 +1,6 @@
 import "./Login.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthenticationFormLayout from "../AuthenticationFormLayout";
 import AuthenticationFields from "../authenticationFields/AuthenticationFields";
@@ -11,6 +11,7 @@ import { LoginPresenter } from "../../../presenter/LoginPresenter";
 
 interface Props {
   originalUrl?: string;
+  presenter?: LoginPresenter;
 }
 
 const Login = (props: Props) => {
@@ -31,8 +32,12 @@ const Login = (props: Props) => {
   };
   const presenterRef = useRef<LoginPresenter | null>(null);
   if (!presenterRef.current) {
-    presenterRef.current = new LoginPresenter(listener);
+    presenterRef.current = props.presenter ?? new LoginPresenter(listener);
   }
+
+  useEffect(() => {
+    presenterRef.current = props.presenter ?? new LoginPresenter(listener);
+  }, [rememberMe]);
 
   const checkSubmitButtonStatus = (): boolean => {
     return !alias || !password;
