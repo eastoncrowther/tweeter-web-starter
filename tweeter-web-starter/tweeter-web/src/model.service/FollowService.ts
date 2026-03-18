@@ -1,5 +1,6 @@
-import { AuthToken, FakeData, User } from "tweeter-shared";
+import { AuthToken, FakeData, User, GetFollowerCountRequest } from "tweeter-shared";
 import { Service } from "./Service";
+import { ServerFacade } from "./net/ServerFacade";
 
 export class FollowService implements Service {
   public async loadMoreFollowees(
@@ -43,8 +44,11 @@ export class FollowService implements Service {
     authToken: AuthToken,
     user: User,
   ): Promise<number> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getFollowerCount(user.alias);
+    const request: GetFollowerCountRequest = {
+      token: authToken.token,
+      user: user.dto,
+    };
+    return new ServerFacade().getFollowerCount(request);
   }
 
   public async follow(
