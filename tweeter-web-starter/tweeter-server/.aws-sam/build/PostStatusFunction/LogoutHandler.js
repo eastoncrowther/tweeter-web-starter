@@ -12611,12 +12611,12 @@ var require_dist = __commonJS({
   }
 });
 
-// src/lambda/LoginHandler.ts
-var LoginHandler_exports = {};
-__export(LoginHandler_exports, {
+// src/lambda/LogoutHandler.ts
+var LogoutHandler_exports = {};
+__export(LogoutHandler_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(LoginHandler_exports);
+module.exports = __toCommonJS(LogoutHandler_exports);
 
 // src/model/service/UserService.ts
 var import_tweeter_shared = __toESM(require_dist());
@@ -12639,19 +12639,13 @@ var UserService = class {
   }
 };
 
-// src/lambda/LoginHandler.ts
+// src/lambda/LogoutHandler.ts
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     const request = body;
     const userService = new UserService();
-    const [user, authToken] = await userService.login(request.alias, request.password);
-    const responseData = {
-      success: true,
-      message: null,
-      user,
-      authToken
-    };
+    await userService.logout(request.token);
     return {
       statusCode: 200,
       headers: {
@@ -12659,7 +12653,10 @@ var handler = async (event) => {
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(responseData)
+      body: JSON.stringify({
+        success: true,
+        message: null
+      })
     };
   } catch (error) {
     console.error("Handler failed:", error);

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "npm run compile",
     "compile": "npm run clean && tsc --noEmit && npm run bundle",
-    "bundle": "esbuild src/lambda/GetFollowerCountHandler.ts src/lambda/GetFolloweeCountHandler.ts src/lambda/LoginHandler.ts src/lambda/RegisterHandler.ts src/lambda/FollowHandler.ts src/lambda/UnfollowHandler.ts --bundle --platform=node --target=node18 --outdir=dist",
+    "bundle": "esbuild src/lambda/GetFollowerCountHandler.ts src/lambda/GetFolloweeCountHandler.ts src/lambda/LoginHandler.ts src/lambda/RegisterHandler.ts src/lambda/FollowHandler.ts src/lambda/UnfollowHandler.ts src/lambda/PostStatusHandler.ts src/lambda/LogoutHandler.ts --bundle --platform=node --target=node18 --outdir=dist",
     "clean": "rimraf dist"
   },
   "keywords": [],

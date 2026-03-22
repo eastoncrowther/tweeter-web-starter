@@ -8,6 +8,9 @@ import {
   AuthResponse,
   FollowRequest,
   FollowResponse,
+  PostStatusRequest,
+  LogoutRequest,
+  TweeterResponse,
   User,
   AuthToken,
 } from "tweeter-shared";
@@ -129,6 +132,34 @@ export class ServerFacade {
     if (response.success) {
       return [response.followerCount, response.followeeCount];
     } else {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async postStatus(
+    request: PostStatusRequest
+  ): Promise<void> {
+    const response = await this.clientCommunicator.doPost<
+      PostStatusRequest,
+      TweeterResponse
+    >(request, "/status/post");
+
+    if (!response.success) {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async logout(
+    request: LogoutRequest
+  ): Promise<void> {
+    const response = await this.clientCommunicator.doPost<
+      LogoutRequest,
+      TweeterResponse
+    >(request, "/logout");
+
+    if (!response.success) {
       console.error(response);
       throw new Error(response.message ?? "An error occurred");
     }

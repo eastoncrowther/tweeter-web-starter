@@ -12635,6 +12635,8 @@ var UserService = class {
     }
     return [user.dto, import_tweeter_shared.FakeData.instance.authToken.dto];
   }
+  async logout(token) {
+  }
 };
 
 // src/lambda/LoginHandler.ts

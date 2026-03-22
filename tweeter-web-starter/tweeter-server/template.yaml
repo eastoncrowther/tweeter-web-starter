@@ -86,3 +86,27 @@ Resources:
           Properties:
             Path: /unfollow
             Method: post
+
+  PostStatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: PostStatusHandler.handler
+      Events:
+        PostStatusApi:
+          Type: Api
+          Properties:
+            Path: /status/post
+            Method: post
+
+  LogoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: LogoutHandler.handler
+      Events:
+        LogoutApi:
+          Type: Api
+          Properties:
+            Path: /logout
+            Method: post

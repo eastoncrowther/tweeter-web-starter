@@ -12611,46 +12611,46 @@ var require_dist = __commonJS({
   }
 });
 
-// src/lambda/LoginHandler.ts
-var LoginHandler_exports = {};
-__export(LoginHandler_exports, {
+// src/lambda/FollowHandler.ts
+var FollowHandler_exports = {};
+__export(FollowHandler_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(LoginHandler_exports);
+module.exports = __toCommonJS(FollowHandler_exports);
 
-// src/model/service/UserService.ts
+// src/model/service/FollowService.ts
 var import_tweeter_shared = __toESM(require_dist());
-var UserService = class {
-  async login(alias, password) {
-    const user = import_tweeter_shared.FakeData.instance.firstUser;
-    if (user === null) {
-      throw new Error("Invalid alias or password");
-    }
-    return [user.dto, import_tweeter_shared.FakeData.instance.authToken.dto];
+var FollowService = class {
+  async getFollowerCount(token, user) {
+    return import_tweeter_shared.FakeData.instance.getFollowerCount(user.alias);
   }
-  async register(firstName, lastName, alias, password, userImageBytes, imageFileExtension) {
-    const user = import_tweeter_shared.FakeData.instance.firstUser;
-    if (user === null) {
-      throw new Error("Invalid registration");
-    }
-    return [user.dto, import_tweeter_shared.FakeData.instance.authToken.dto];
+  async getFolloweeCount(token, user) {
+    return import_tweeter_shared.FakeData.instance.getFolloweeCount(user.alias);
   }
-  async logout(token) {
+  async follow(token, user) {
+    const followerCount = await this.getFollowerCount(token, user);
+    const followeeCount = await this.getFolloweeCount(token, user);
+    return [followerCount, followeeCount];
+  }
+  async unfollow(token, user) {
+    const followerCount = await this.getFollowerCount(token, user);
+    const followeeCount = await this.getFolloweeCount(token, user);
+    return [followerCount, followeeCount];
   }
 };
 
-// src/lambda/LoginHandler.ts
+// src/lambda/FollowHandler.ts
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     const request = body;
-    const userService = new UserService();
-    const [user, authToken] = await userService.login(request.alias, request.password);
+    const followService = new FollowService();
+    const [followerCount, followeeCount] = await followService.follow(request.token, request.user);
     const responseData = {
       success: true,
       message: null,
-      user,
-      authToken
+      followerCount,
+      followeeCount
     };
     return {
       statusCode: 200,

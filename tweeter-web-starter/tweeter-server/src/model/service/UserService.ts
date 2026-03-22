@@ -27,4 +27,9 @@ export class UserService {
 
     return [user.dto, FakeData.instance.authToken.dto];
   }
+
+  public async logout(token: string): Promise<void> {
+    // For milestone 3, this is a no-op
+    // In a real implementation, this would invalidate the auth token
+  }
 }

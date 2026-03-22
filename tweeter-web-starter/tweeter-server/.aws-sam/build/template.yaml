@@ -91,3 +91,29 @@ Resources:
             Method: post
     Metadata:
       SamResourceId: UnfollowFunction
+  PostStatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: PostStatusFunction
+      Handler: PostStatusHandler.handler
+      Events:
+        PostStatusApi:
+          Type: Api
+          Properties:
+            Path: /status/post
+            Method: post
+    Metadata:
+      SamResourceId: PostStatusFunction
+  LogoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: LogoutFunction
+      Handler: LogoutHandler.handler
+      Events:
+        LogoutApi:
+          Type: Api
+          Properties:
+            Path: /logout
+            Method: post
+    Metadata:
+      SamResourceId: LogoutFunction

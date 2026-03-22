@@ -7,6 +7,6 @@ architecture = "x86_64"
 handler = "GetFollowerCountHandler.handler"
 manifest_hash = ""
 packagetype = "Zip"
-functions = ["GetFollowerCountFunction", "GetFolloweeCountFunction", "LoginFunction", "RegisterFunction", "FollowFunction", "UnfollowFunction"]
+functions = ["GetFollowerCountFunction", "GetFolloweeCountFunction", "LoginFunction", "RegisterFunction", "FollowFunction", "UnfollowFunction", "PostStatusFunction", "LogoutFunction"]
 
 [layer_build_definitions]
