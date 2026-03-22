@@ -26,4 +26,15 @@ Resources:
           Properties:
             Path: /follower/count
             Method: post
-    
+
+  GetFolloweeCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: GetFolloweeCountHandler.handler
+      Events:
+        GetFolloweeCountApi:
+          Type: Api
+          Properties:
+            Path: /followee/count
+            Method: post

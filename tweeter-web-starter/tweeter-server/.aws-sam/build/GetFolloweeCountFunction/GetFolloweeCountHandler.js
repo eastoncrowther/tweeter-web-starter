@@ -12611,12 +12611,12 @@ var require_dist = __commonJS({
   }
 });
 
-// src/lambda/GetFollowerCountHandler.ts
-var GetFollowerCountHandler_exports = {};
-__export(GetFollowerCountHandler_exports, {
+// src/lambda/GetFolloweeCountHandler.ts
+var GetFolloweeCountHandler_exports = {};
+__export(GetFolloweeCountHandler_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(GetFollowerCountHandler_exports);
+module.exports = __toCommonJS(GetFolloweeCountHandler_exports);
 
 // src/model/service/FollowService.ts
 var import_tweeter_shared = __toESM(require_dist());
@@ -12629,17 +12629,17 @@ var FollowService = class {
   }
 };
 
-// src/lambda/GetFollowerCountHandler.ts
+// src/lambda/GetFolloweeCountHandler.ts
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     const request = body;
     const followService = new FollowService();
-    const count = await followService.getFollowerCount(request.token, request.user);
+    const count = await followService.getFolloweeCount(request.token, request.user);
     const responseData = {
       success: true,
       message: null,
-      followerCount: count
+      followeeCount: count
     };
     return {
       statusCode: 200,

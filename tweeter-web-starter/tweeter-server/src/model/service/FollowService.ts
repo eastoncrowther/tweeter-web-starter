@@ -5,4 +5,9 @@ export class FollowService {
     // For milestone 3, we just return the dummy data here
     return FakeData.instance.getFollowerCount(user.alias);
   }
+
+  public async getFolloweeCount(token: string, user: UserDto): Promise<number> {
+    // For milestone 3, we just return the dummy data here
+    return FakeData.instance.getFolloweeCount(user.alias);
+  }
 }

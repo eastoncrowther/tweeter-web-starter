@@ -26,3 +26,16 @@ Resources:
             Method: post
     Metadata:
       SamResourceId: GetFollowerCountFunction
+  GetFolloweeCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetFolloweeCountFunction
+      Handler: GetFolloweeCountHandler.handler
+      Events:
+        GetFolloweeCountApi:
+          Type: Api
+          Properties:
+            Path: /followee/count
+            Method: post
+    Metadata:
+      SamResourceId: GetFolloweeCountFunction
