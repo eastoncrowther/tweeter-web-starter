@@ -16,8 +16,13 @@ export type { AuthTokenDto } from "./model/dto/AuthTokenDto";
 export type { TweeterRequest } from "./model/net/request/TweeterRequest";
 export type { GetFollowerCountRequest } from "./model/net/request/GetFollowerCountRequest";
 export type { GetFolloweeCountRequest } from "./model/net/request/GetFolloweeCountRequest";
+export type { LoginRequest } from "./model/net/request/LoginRequest";
+export type { RegisterRequest } from "./model/net/request/RegisterRequest";
+export type { FollowRequest } from "./model/net/request/FollowRequest";
 
 // Responses
 export type { TweeterResponse } from "./model/net/response/TweeterResponse";
 export type { GetFollowerCountResponse } from "./model/net/response/GetFollowerCountResponse";
 export type { GetFolloweeCountResponse } from "./model/net/response/GetFolloweeCountResponse";
+export type { AuthResponse } from "./model/net/response/AuthResponse";
+export type { FollowResponse } from "./model/net/response/FollowResponse";

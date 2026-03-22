@@ -1,6 +1,7 @@
 import { Buffer } from "buffer";
-import { AuthToken, FakeData, User } from "tweeter-shared";
+import { AuthToken, FakeData, User, LoginRequest, RegisterRequest } from "tweeter-shared";
 import { Service } from "./Service";
+import { ServerFacade } from "./net/ServerFacade";
 
 export class UserService implements Service {
   public async getUser(
@@ -15,14 +16,12 @@ export class UserService implements Service {
     alias: string,
     password: string,
   ): Promise<[User, AuthToken]> {
-    // TODO: Replace with the result of calling the server
-    const user = FakeData.instance.firstUser;
-
-    if (user === null) {
-      throw new Error("Invalid alias or password");
-    }
-
-    return [user, FakeData.instance.authToken];
+    const request: LoginRequest = {
+      token: "",
+      alias: alias,
+      password: password,
+    };
+    return new ServerFacade().login(request);
   }
 
   public async register(
@@ -33,18 +32,19 @@ export class UserService implements Service {
     userImageBytes: Uint8Array,
     imageFileExtension: string,
   ): Promise<[User, AuthToken]> {
-    // Not neded now, but will be needed when you make the request to the server in milestone 3
     const imageStringBase64: string =
       Buffer.from(userImageBytes).toString("base64");
 
-    // TODO: Replace with the result of calling the server
-    const user = FakeData.instance.firstUser;
-
-    if (user === null) {
-      throw new Error("Invalid registration");
-    }
-
-    return [user, FakeData.instance.authToken];
+    const request: RegisterRequest = {
+      token: "",
+      firstName: firstName,
+      lastName: lastName,
+      alias: alias,
+      password: password,
+      userImageBytes: imageStringBase64,
+      imageFileExtension: imageFileExtension,
+    };
+    return new ServerFacade().register(request);
   }
 
   public async logout(authToken: AuthToken): Promise<void> {

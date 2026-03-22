@@ -12611,51 +12611,49 @@ var require_dist = __commonJS({
   }
 });
 
-// src/lambda/GetFolloweeCountHandler.ts
-var GetFolloweeCountHandler_exports = {};
-__export(GetFolloweeCountHandler_exports, {
+// src/lambda/LoginHandler.ts
+var LoginHandler_exports = {};
+__export(LoginHandler_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(GetFolloweeCountHandler_exports);
+module.exports = __toCommonJS(LoginHandler_exports);
 
-// src/model/service/FollowService.ts
+// src/model/service/UserService.ts
 var import_tweeter_shared = __toESM(require_dist());
-var FollowService = class {
-  async getFollowerCount(token, user) {
-    return import_tweeter_shared.FakeData.instance.getFollowerCount(user.alias);
+var UserService = class {
+  async login(alias, password) {
+    const user = import_tweeter_shared.FakeData.instance.firstUser;
+    if (user === null) {
+      throw new Error("Invalid alias or password");
+    }
+    return [user.dto, import_tweeter_shared.FakeData.instance.authToken.dto];
   }
-  async getFolloweeCount(token, user) {
-    return import_tweeter_shared.FakeData.instance.getFolloweeCount(user.alias);
-  }
-  async follow(token, user) {
-    const followerCount = await this.getFollowerCount(token, user);
-    const followeeCount = await this.getFolloweeCount(token, user);
-    return [followerCount, followeeCount];
-  }
-  async unfollow(token, user) {
-    const followerCount = await this.getFollowerCount(token, user);
-    const followeeCount = await this.getFolloweeCount(token, user);
-    return [followerCount, followeeCount];
+  async register(firstName, lastName, alias, password, userImageBytes, imageFileExtension) {
+    const user = import_tweeter_shared.FakeData.instance.firstUser;
+    if (user === null) {
+      throw new Error("Invalid registration");
+    }
+    return [user.dto, import_tweeter_shared.FakeData.instance.authToken.dto];
   }
 };
 
-// src/lambda/GetFolloweeCountHandler.ts
+// src/lambda/LoginHandler.ts
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     const request = body;
-    const followService = new FollowService();
-    const count = await followService.getFolloweeCount(request.token, request.user);
+    const userService = new UserService();
+    const [user, authToken] = await userService.login(request.alias, request.password);
     const responseData = {
       success: true,
       message: null,
-      followeeCount: count
+      user,
+      authToken
     };
     return {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        // Essential so your React local server can talk to AWS
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
         "Content-Type": "application/json"
       },

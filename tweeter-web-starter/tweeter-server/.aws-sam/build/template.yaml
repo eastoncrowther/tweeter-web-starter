@@ -39,3 +39,55 @@ Resources:
             Method: post
     Metadata:
       SamResourceId: GetFolloweeCountFunction
+  LoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: LoginFunction
+      Handler: LoginHandler.handler
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post
+    Metadata:
+      SamResourceId: LoginFunction
+  RegisterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: RegisterFunction
+      Handler: RegisterHandler.handler
+      Events:
+        RegisterApi:
+          Type: Api
+          Properties:
+            Path: /register
+            Method: post
+    Metadata:
+      SamResourceId: RegisterFunction
+  FollowFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: FollowFunction
+      Handler: FollowHandler.handler
+      Events:
+        FollowApi:
+          Type: Api
+          Properties:
+            Path: /follow
+            Method: post
+    Metadata:
+      SamResourceId: FollowFunction
+  UnfollowFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: UnfollowFunction
+      Handler: UnfollowHandler.handler
+      Events:
+        UnfollowApi:
+          Type: Api
+          Properties:
+            Path: /unfollow
+            Method: post
+    Metadata:
+      SamResourceId: UnfollowFunction

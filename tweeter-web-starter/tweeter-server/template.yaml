@@ -38,3 +38,51 @@ Resources:
           Properties:
             Path: /followee/count
             Method: post
+
+  LoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: LoginHandler.handler
+      Events:
+        LoginApi:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post
+
+  RegisterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: RegisterHandler.handler
+      Events:
+        RegisterApi:
+          Type: Api
+          Properties:
+            Path: /register
+            Method: post
+
+  FollowFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: FollowHandler.handler
+      Events:
+        FollowApi:
+          Type: Api
+          Properties:
+            Path: /follow
+            Method: post
+
+  UnfollowFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: UnfollowHandler.handler
+      Events:
+        UnfollowApi:
+          Type: Api
+          Properties:
+            Path: /unfollow
+            Method: post

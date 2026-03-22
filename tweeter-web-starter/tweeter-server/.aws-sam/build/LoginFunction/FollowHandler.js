@@ -12611,12 +12611,12 @@ var require_dist = __commonJS({
   }
 });
 
-// src/lambda/GetFolloweeCountHandler.ts
-var GetFolloweeCountHandler_exports = {};
-__export(GetFolloweeCountHandler_exports, {
+// src/lambda/FollowHandler.ts
+var FollowHandler_exports = {};
+__export(FollowHandler_exports, {
   handler: () => handler
 });
-module.exports = __toCommonJS(GetFolloweeCountHandler_exports);
+module.exports = __toCommonJS(FollowHandler_exports);
 
 // src/model/service/FollowService.ts
 var import_tweeter_shared = __toESM(require_dist());
@@ -12639,23 +12639,23 @@ var FollowService = class {
   }
 };
 
-// src/lambda/GetFolloweeCountHandler.ts
+// src/lambda/FollowHandler.ts
 var handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     const request = body;
     const followService = new FollowService();
-    const count = await followService.getFolloweeCount(request.token, request.user);
+    const [followerCount, followeeCount] = await followService.follow(request.token, request.user);
     const responseData = {
       success: true,
       message: null,
-      followeeCount: count
+      followerCount,
+      followeeCount
     };
     return {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        // Essential so your React local server can talk to AWS
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET",
         "Content-Type": "application/json"
       },
