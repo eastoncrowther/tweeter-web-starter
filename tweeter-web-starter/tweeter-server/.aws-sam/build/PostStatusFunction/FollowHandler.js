@@ -12637,6 +12637,18 @@ var FollowService = class {
     const followeeCount = await this.getFolloweeCount(token, user);
     return [followerCount, followeeCount];
   }
+  async isFollower(token, user, selectedUser) {
+    return import_tweeter_shared.FakeData.instance.isFollower();
+  }
+  async getFollowers(token, userAlias, pageSize, lastItem) {
+    const [users, hasMore] = import_tweeter_shared.FakeData.instance.getPageOfUsers(
+      lastItem ? import_tweeter_shared.FakeData.instance.findUserByAlias(lastItem.alias) : null,
+      pageSize,
+      userAlias
+    );
+    const userDtos = users.map((u) => u.dto);
+    return [userDtos, hasMore];
+  }
 };
 
 // src/lambda/FollowHandler.ts

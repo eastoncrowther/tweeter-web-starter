@@ -117,3 +117,42 @@ Resources:
             Method: post
     Metadata:
       SamResourceId: LogoutFunction
+  IsFollowerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: IsFollowerFunction
+      Handler: IsFollowerHandler.handler
+      Events:
+        IsFollowerApi:
+          Type: Api
+          Properties:
+            Path: /follower/isFollower
+            Method: post
+    Metadata:
+      SamResourceId: IsFollowerFunction
+  GetFollowersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetFollowersFunction
+      Handler: GetFollowersHandler.handler
+      Events:
+        GetFollowersApi:
+          Type: Api
+          Properties:
+            Path: /follower/list
+            Method: post
+    Metadata:
+      SamResourceId: GetFollowersFunction
+  GetUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetUserFunction
+      Handler: GetUserHandler.handler
+      Events:
+        GetUserApi:
+          Type: Api
+          Properties:
+            Path: /user/get
+            Method: post
+    Metadata:
+      SamResourceId: GetUserFunction

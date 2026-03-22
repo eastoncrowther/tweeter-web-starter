@@ -110,3 +110,39 @@ Resources:
           Properties:
             Path: /logout
             Method: post
+
+  IsFollowerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: IsFollowerHandler.handler
+      Events:
+        IsFollowerApi:
+          Type: Api
+          Properties:
+            Path: /follower/isFollower
+            Method: post
+
+  GetFollowersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: GetFollowersHandler.handler
+      Events:
+        GetFollowersApi:
+          Type: Api
+          Properties:
+            Path: /follower/list
+            Method: post
+
+  GetUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: GetUserHandler.handler
+      Events:
+        GetUserApi:
+          Type: Api
+          Properties:
+            Path: /user/get
+            Method: post

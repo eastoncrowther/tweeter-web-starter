@@ -24,4 +24,24 @@ export class FollowService {
     const followeeCount = await this.getFolloweeCount(token, user);
     return [followerCount, followeeCount];
   }
+
+  public async isFollower(token: string, user: UserDto, selectedUser: UserDto): Promise<boolean> {
+    // For milestone 3, dummy response
+    return FakeData.instance.isFollower();
+  }
+
+  public async getFollowers(
+    token: string,
+    userAlias: string,
+    pageSize: number,
+    lastItem: UserDto | null
+  ): Promise<[UserDto[], boolean]> {
+    const [users, hasMore] = FakeData.instance.getPageOfUsers(
+      lastItem ? FakeData.instance.findUserByAlias(lastItem.alias) : null,
+      pageSize,
+      userAlias
+    );
+    const userDtos = users.map(u => u.dto);
+    return [userDtos, hasMore];
+  }
 }

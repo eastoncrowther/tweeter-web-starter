@@ -32,4 +32,9 @@ export class UserService {
     // For milestone 3, this is a no-op
     // In a real implementation, this would invalidate the auth token
   }
+
+  public async getUser(token: string, alias: string): Promise<UserDto | null> {
+    const user = FakeData.instance.findUserByAlias(alias);
+    return user ? user.dto : null;
+  }
 }

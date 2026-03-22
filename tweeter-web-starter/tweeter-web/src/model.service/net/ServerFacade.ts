@@ -11,6 +11,12 @@ import {
   PostStatusRequest,
   LogoutRequest,
   TweeterResponse,
+  GetFollowersRequest,
+  GetFollowersResponse,
+  IsFollowerRequest,
+  IsFollowerResponse,
+  GetUserRequest,
+  GetUserResponse,
   User,
   AuthToken,
 } from "tweeter-shared";
@@ -160,6 +166,59 @@ export class ServerFacade {
     >(request, "/logout");
 
     if (!response.success) {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async getIsFollowerStatus(
+    request: IsFollowerRequest
+  ): Promise<boolean> {
+    const response = await this.clientCommunicator.doPost<
+      IsFollowerRequest,
+      IsFollowerResponse
+    >(request, "/follower/isFollower");
+
+    if (response.success) {
+      return response.isFollower;
+    } else {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async loadMoreFollowers(
+    request: GetFollowersRequest
+  ): Promise<[User[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      GetFollowersRequest,
+      GetFollowersResponse
+    >(request, "/follower/list");
+
+    if (response.success) {
+      const followers = response.followers.map(dto => User.fromDto(dto)!);
+      return [followers, response.hasMorePages];
+    } else {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async getUser(
+    request: GetUserRequest
+  ): Promise<User | null> {
+    const response = await this.clientCommunicator.doPost<
+      GetUserRequest,
+      GetUserResponse
+    >(request, "/user/get");
+
+    if (response.success) {
+      if (response.user) {
+        return User.fromDto(response.user);
+      } else {
+        return null;
+      }
+    } else {
       console.error(response);
       throw new Error(response.message ?? "An error occurred");
     }

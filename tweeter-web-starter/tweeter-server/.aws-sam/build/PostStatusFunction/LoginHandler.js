@@ -12637,6 +12637,10 @@ var UserService = class {
   }
   async logout(token) {
   }
+  async getUser(token, alias) {
+    const user = import_tweeter_shared.FakeData.instance.findUserByAlias(alias);
+    return user ? user.dto : null;
+  }
 };
 
 // src/lambda/LoginHandler.ts

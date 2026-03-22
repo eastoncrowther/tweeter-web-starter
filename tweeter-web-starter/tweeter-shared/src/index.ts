@@ -21,6 +21,9 @@ export type { RegisterRequest } from "./model/net/request/RegisterRequest";
 export type { FollowRequest } from "./model/net/request/FollowRequest";
 export type { PostStatusRequest } from "./model/net/request/PostStatusRequest";
 export type { LogoutRequest } from "./model/net/request/LogoutRequest";
+export type { IsFollowerRequest } from "./model/net/request/IsFollowerRequest";
+export type { GetFollowersRequest } from "./model/net/request/GetFollowersRequest";
+export type { GetUserRequest } from "./model/net/request/GetUserRequest";
 
 // Responses
 export type { TweeterResponse } from "./model/net/response/TweeterResponse";
@@ -28,3 +31,6 @@ export type { GetFollowerCountResponse } from "./model/net/response/GetFollowerC
 export type { GetFolloweeCountResponse } from "./model/net/response/GetFolloweeCountResponse";
 export type { AuthResponse } from "./model/net/response/AuthResponse";
 export type { FollowResponse } from "./model/net/response/FollowResponse";
+export type { IsFollowerResponse } from "./model/net/response/IsFollowerResponse";
+export type { GetFollowersResponse } from "./model/net/response/GetFollowersResponse";
+export type { GetUserResponse } from "./model/net/response/GetUserResponse";
