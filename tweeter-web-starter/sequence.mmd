@@ -1,0 +1,63 @@
+sequenceDiagram
+    participant User
+    participant PostStatus as PostStatus
+    participant Presenter as PostStatusPresenter
+    participant ClientService as StatusService (Client)
+    participant Facade as ServerFacade
+    participant Communicator as ClientCommunicator
+    participant APIGW as API Gateway
+    participant Handler as PostStatusHandler
+    participant ServerService as StatusService (Server)
+    participant StoryDAO as StoryDAO
+    participant SQS as SQS (PostStatusQueue)
+
+    User->>PostStatus: submitPost(event)
+    activate PostStatus
+    PostStatus->>Presenter: submitPost(post, user)
+    activate Presenter
+    Presenter->>ClientService: postStatus(token, status)
+    activate ClientService
+    ClientService->>Facade: postStatus(request)
+    activate Facade
+    Facade->>Communicator: doPost(url, request)
+    activate Communicator
+    Communicator->>APIGW: HTTP POST /status/post
+    activate APIGW
+    
+    APIGW->>Handler: handler(event)
+    activate Handler
+    Handler->>ServerService: postStatus(token, post, userAlias, timestamp)
+    activate ServerService
+    
+    ServerService->>StoryDAO: postStatus()
+    activate StoryDAO
+    StoryDAO-->>ServerService: success
+    deactivate StoryDAO
+    
+    note right of ServerService: Asynchronous nature shown from 2C diagram
+    ServerService->>SQS: sendMessage(message)
+    activate SQS
+    SQS-->>ServerService: messageId
+    deactivate SQS
+    
+    ServerService-->>Handler: void
+    deactivate ServerService
+    
+    Handler-->>APIGW: HTTP 200 OK
+    deactivate Handler
+    
+    APIGW-->>Communicator: HTTP 200 OK
+    deactivate APIGW
+    
+    Communicator-->>Facade: JSON response
+    deactivate Communicator
+    
+    Facade-->>ClientService: void
+    deactivate Facade
+    
+    ClientService-->>Presenter: void
+    deactivate ClientService
+    
+    Presenter->>PostStatus: displayInfoMessage("Status posted!")
+    deactivate Presenter
+    deactivate PostStatus

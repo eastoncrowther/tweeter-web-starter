@@ -7,7 +7,11 @@ export const handler = async (event: any): Promise<any> => {
   try {
     // 1. Parse the stringified JSON body from the API Gateway event
     const body = JSON.parse(event.body);
-    const request = body as GetFollowerCountRequest; 
+    const request = body as GetFollowerCountRequest;
+    if (!request.token || !request.user) {
+      throw new Error("[Bad Request] Missing required fields");
+    }
+ 
 
     // 2. Execute your business logic
     const followService = new FollowService();
@@ -33,6 +37,19 @@ export const handler = async (event: any): Promise<any> => {
 
   } catch (error) {
     console.error("Handler failed:", error);
+
+    if (error instanceof Error && error.message.includes("[Bad Request]")) {
+      return {
+        statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          success: false,
+          message: error.message,
+        }),
+      };
+    }
     
     // Return a structured error response if something crashes
     return {

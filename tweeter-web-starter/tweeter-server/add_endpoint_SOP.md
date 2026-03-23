@@ -38,6 +38,9 @@ npx esbuild src/lambda/GetFollowerCountHandler.ts src/lambda/LoginHandler.ts --b
 
 2. Package and Deploy:
 
+// in all the previous steps all you have to do now is npm run build in the server. After that the commands with sam should work!
+
+
 Bash
 sam build
 sam deploy

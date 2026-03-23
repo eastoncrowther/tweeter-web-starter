@@ -1,0 +1,836 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: "tweeter-backend"
+host: "1luhyw26n8.execute-api.us-east-1.amazonaws.com"
+basePath: "/Prod"
+schemes:
+- "https"
+paths:
+  /follow:
+    post:
+      description: "Makes the current user follow the specified user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-FollowFunction-l0R9bfjfB71j/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /followee/count:
+    post:
+      description: "Returns the number of followees for a given user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-GetFolloweeCountFunction-tEdzIbugEs1O/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /followee/list:
+    post:
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-GetFolloweesFunction-bl7HmAUBWlJ6/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /follower/count:
+    post:
+      description: "Returns the number of followers for a given user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-GetFollowerCountFunction-tmolqR4IZ2A9/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /follower/isFollower:
+    post:
+      description: "Checks if a user is a follower of another specified user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-IsFollowerFunction-MI1kbXQ8zhCg/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /follower/list:
+    post:
+      description: "Returns a paginated list of a users followers."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-GetFollowersFunction-Y8U5eeYCWtZk/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /login:
+    post:
+      description: "Logs in a user and returns an auth token."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-LoginFunction-CfHGM7VkBogg/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /logout:
+    post:
+      description: "Logs out a user and invalidates their auth token."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-LogoutFunction-nt4rDuLIx8ka/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /register:
+    post:
+      description: "Registers a new user and returns an auth token."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-RegisterFunction-ZKGN5FfuDbkk/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /status/feed:
+    post:
+      description: "Returns a paginated list of statuses from users the current user\
+        \ follows."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-GetFeedFunction-BppMenfX7kHv/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /status/post:
+    post:
+      description: "Posts a new status (tweet) for the current user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-PostStatusFunction-NYku1wCcMAdw/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /status/story:
+    post:
+      description: "Returns a paginated list of statuses posted by the specified user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-GetStoryFunction-OHjMzU4sYn8s/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /unfollow:
+    post:
+      description: "Makes the current user unfollow the specified user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-UnfollowFunction-EDR8O87M8JJd/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /user/get:
+    post:
+      description: "Returns details of a specified user."
+      responses: {}
+      x-amazon-apigateway-integration:
+        uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:545009834748:function:tweeter-backend-GetUserFunction-ML8Ly4cYGLLF/invocations"
+        httpMethod: "POST"
+        passthroughBehavior: "when_no_match"
+        responseTransferMode: "BUFFERED"
+        type: "aws_proxy"
+    options:
+      summary: "CORS support"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Default response for CORS method"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "{}\n"
+        requestTemplates:
+          application/json: "{\n  \"statusCode\" : 200\n}\n"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+x-amazon-apigateway-documentation:
+  version: "v1.0.1"
+  createdDate: "2026-03-23T20:38:07Z"
+  documentationParts:
+  - location:
+      type: "METHOD"
+      path: "/follow"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/follow"
+      method: "POST"
+    properties:
+      description: "Makes the current user follow the specified user."
+  - location:
+      type: "METHOD"
+      path: "/followee/count"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/followee/count"
+      method: "POST"
+    properties:
+      description: "Returns the number of followees for a given user."
+  - location:
+      type: "METHOD"
+      path: "/followee/list"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/follower/count"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/follower/count"
+      method: "POST"
+    properties:
+      description: "Returns the number of followers for a given user."
+  - location:
+      type: "METHOD"
+      path: "/follower/isFollower"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/follower/isFollower"
+      method: "POST"
+    properties:
+      description: "Checks if a user is a follower of another specified user."
+  - location:
+      type: "METHOD"
+      path: "/follower/list"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/follower/list"
+      method: "POST"
+    properties:
+      description: "Returns a paginated list of a users followers."
+  - location:
+      type: "METHOD"
+      path: "/login"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/login"
+      method: "POST"
+    properties:
+      description: "Logs in a user and returns an auth token."
+  - location:
+      type: "METHOD"
+      path: "/logout"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/logout"
+      method: "POST"
+    properties:
+      description: "Logs out a user and invalidates their auth token."
+  - location:
+      type: "METHOD"
+      path: "/register"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/register"
+      method: "POST"
+    properties:
+      description: "Registers a new user and returns an auth token."
+  - location:
+      type: "METHOD"
+      path: "/status/feed"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/status/feed"
+      method: "POST"
+    properties:
+      description: "Returns a paginated list of statuses from users the current user\
+        \ follows."
+  - location:
+      type: "METHOD"
+      path: "/status/post"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/status/post"
+      method: "POST"
+    properties:
+      description: "Posts a new status (tweet) for the current user."
+  - location:
+      type: "METHOD"
+      path: "/status/story"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/status/story"
+      method: "POST"
+    properties:
+      description: "Returns a paginated list of statuses posted by the specified user."
+  - location:
+      type: "METHOD"
+      path: "/unfollow"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/unfollow"
+      method: "POST"
+    properties:
+      description: "Makes the current user unfollow the specified user."
+  - location:
+      type: "METHOD"
+      path: "/user/get"
+      method: "OPTIONS"
+    properties:
+      summary: "CORS support"
+  - location:
+      type: "METHOD"
+      path: "/user/get"
+      method: "POST"
+    properties:
+      description: "Returns details of a specified user."
+  - location:
+      type: "RESPONSE"
+      path: "/follow"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/followee/count"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/followee/list"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/follower/count"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/follower/isFollower"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/follower/list"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/login"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/logout"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/register"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/status/feed"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/status/post"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/status/story"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/unfollow"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+  - location:
+      type: "RESPONSE"
+      path: "/user/get"
+      method: "OPTIONS"
+      statusCode: "200"
+    properties:
+      description: "Default response for CORS method"
+x-amazon-apigateway-security-policy: "TLS_1_0"
