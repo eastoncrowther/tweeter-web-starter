@@ -9,7 +9,7 @@ export class StoryPresenter extends StatusItemPresenter {
     authToken: AuthToken,
     userAlias: string,
   ): Promise<[Status[], boolean]> {
-    return this.service.loadMoreStatusScrollerItems(
+    return this.service.loadMoreStoryItems(
       authToken,
       userAlias,
       PAGE_SIZE,

@@ -11799,6 +11799,23 @@ var require_Status = __commonJS({
         this._timestamp = timestamp;
         this._segments = this.getPostSegments(post);
       }
+      get dto() {
+        return {
+          post: this._post,
+          user: this._user.dto,
+          timestamp: this._timestamp
+        };
+      }
+      static fromDto(dto) {
+        if (dto == null) {
+          return null;
+        }
+        const user = User_1.User.fromDto(dto.user);
+        if (!user) {
+          return null;
+        }
+        return new _Status(dto.post, user, dto.timestamp);
+      }
       getPostSegments(post) {
         const segments = [];
         let startIndex = 0;
@@ -12570,6 +12587,20 @@ var require_FakeData = __commonJS({
       getFolloweeCount(userAlias) {
         return Math.floor(Math.random() * 10) + 1;
       }
+      /**
+       * Finds the status with the specified post.
+       *
+       * @param post the post of the status to be returned.
+       * @returns the status or null if no status is found with the specified post.
+       */
+      findStatusByPost(post) {
+        for (const status of this.fakeStatuses) {
+          if (status.post === post) {
+            return status;
+          }
+        }
+        return null;
+      }
     };
     exports.FakeData = FakeData2;
   }
@@ -12641,6 +12672,15 @@ var FollowService = class {
     return import_tweeter_shared.FakeData.instance.isFollower();
   }
   async getFollowers(token, userAlias, pageSize, lastItem) {
+    const [users, hasMore] = import_tweeter_shared.FakeData.instance.getPageOfUsers(
+      lastItem ? import_tweeter_shared.FakeData.instance.findUserByAlias(lastItem.alias) : null,
+      pageSize,
+      userAlias
+    );
+    const userDtos = users.map((u) => u.dto);
+    return [userDtos, hasMore];
+  }
+  async getFollowees(token, userAlias, pageSize, lastItem) {
     const [users, hasMore] = import_tweeter_shared.FakeData.instance.getPageOfUsers(
       lastItem ? import_tweeter_shared.FakeData.instance.findUserByAlias(lastItem.alias) : null,
       pageSize,

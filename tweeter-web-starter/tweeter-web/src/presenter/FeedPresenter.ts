@@ -10,7 +10,7 @@ export class FeedPresenter extends StatusItemPresenter {
     authToken: AuthToken,
     userAlias: string,
   ): Promise<[Status[], boolean]> {
-    return this.service.loadMoreStatusScrollerItems(
+    return this.service.loadMoreFeedItems(
       authToken,
       userAlias,
       PAGE_SIZE,

@@ -146,3 +146,39 @@ Resources:
           Properties:
             Path: /user/get
             Method: post
+
+  GetFolloweesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: GetFolloweesHandler.handler
+      Events:
+        GetFolloweesApi:
+          Type: Api
+          Properties:
+            Path: /followee/list
+            Method: post
+
+  GetFeedFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: GetFeedHandler.handler
+      Events:
+        GetFeedApi:
+          Type: Api
+          Properties:
+            Path: /status/feed
+            Method: post
+
+  GetStoryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: GetStoryHandler.handler
+      Events:
+        GetStoryApi:
+          Type: Api
+          Properties:
+            Path: /status/story
+            Method: post

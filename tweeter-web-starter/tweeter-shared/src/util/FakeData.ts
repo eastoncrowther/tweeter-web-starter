@@ -244,4 +244,19 @@ export class FakeData {
   public getFolloweeCount(userAlias: string): number | PromiseLike<number> {
     return Math.floor(Math.random() * 10) + 1
   }
+
+  /**
+   * Finds the status with the specified post.
+   *
+   * @param post the post of the status to be returned.
+   * @returns the status or null if no status is found with the specified post.
+   */
+  public findStatusByPost(post: string): Status | null {
+    for (const status of this.fakeStatuses) {
+      if (status.post === post) {
+        return status;
+      }
+    }
+    return null;
+  }
 }

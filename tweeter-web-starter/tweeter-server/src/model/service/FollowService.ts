@@ -44,4 +44,19 @@ export class FollowService {
     const userDtos = users.map(u => u.dto);
     return [userDtos, hasMore];
   }
+
+  public async getFollowees(
+    token: string,
+    userAlias: string,
+    pageSize: number,
+    lastItem: UserDto | null
+  ): Promise<[UserDto[], boolean]> {
+    const [users, hasMore] = FakeData.instance.getPageOfUsers(
+      lastItem ? FakeData.instance.findUserByAlias(lastItem.alias) : null,
+      pageSize,
+      userAlias
+    );
+    const userDtos = users.map(u => u.dto);
+    return [userDtos, hasMore];
+  }
 }

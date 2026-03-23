@@ -17,7 +17,12 @@ import {
   IsFollowerResponse,
   GetUserRequest,
   GetUserResponse,
+  GetFolloweesRequest,
+  GetFolloweesResponse,
+  PagedStatusRequest,
+  PagedStatusResponse,
   User,
+  Status,
   AuthToken,
 } from "tweeter-shared";
 import { ClientCommunicator } from "./ClientCommunicator";
@@ -218,6 +223,57 @@ export class ServerFacade {
       } else {
         return null;
       }
+    } else {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async loadMoreFollowees(
+    request: GetFolloweesRequest
+  ): Promise<[User[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      GetFolloweesRequest,
+      GetFolloweesResponse
+    >(request, "/followee/list");
+
+    if (response.success) {
+      const followees = response.followees.map(dto => User.fromDto(dto)!);
+      return [followees, response.hasMorePages];
+    } else {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async loadMoreFeedItems(
+    request: PagedStatusRequest
+  ): Promise<[Status[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      PagedStatusRequest,
+      PagedStatusResponse
+    >(request, "/status/feed");
+
+    if (response.success) {
+      const statuses = response.statuses.map(dto => Status.fromDto(dto)!);
+      return [statuses, response.hasMorePages];
+    } else {
+      console.error(response);
+      throw new Error(response.message ?? "An error occurred");
+    }
+  }
+
+  public async loadMoreStoryItems(
+    request: PagedStatusRequest
+  ): Promise<[Status[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      PagedStatusRequest,
+      PagedStatusResponse
+    >(request, "/status/story");
+
+    if (response.success) {
+      const statuses = response.statuses.map(dto => Status.fromDto(dto)!);
+      return [statuses, response.hasMorePages];
     } else {
       console.error(response);
       throw new Error(response.message ?? "An error occurred");

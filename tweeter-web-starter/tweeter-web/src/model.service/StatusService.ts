@@ -1,4 +1,4 @@
-import { AuthToken, Status, FakeData, PostStatusRequest } from "tweeter-shared";
+import { AuthToken, Status, FakeData, PostStatusRequest, PagedStatusRequest } from "tweeter-shared";
 import { Service } from "./Service";
 import { ServerFacade } from "./net/ServerFacade";
 
@@ -9,8 +9,13 @@ export class StatusService implements Service {
     pageSize: number,
     lastItem: Status | null,
   ): Promise<[Status[], boolean]> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
+    const request: PagedStatusRequest = {
+      token: authToken.token,
+      userAlias: userAlias,
+      pageSize: pageSize,
+      lastItem: lastItem ? lastItem.dto : null,
+    };
+    return new ServerFacade().loadMoreFeedItems(request);
   }
 
   public async loadMoreStoryItems(
@@ -19,19 +24,13 @@ export class StatusService implements Service {
     pageSize: number,
     lastItem: Status | null,
   ): Promise<[Status[], boolean]> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
-  }
-
-  // TODO: DELETE THIS FUNCTION: IT IS A DUPLICATE OF EITHER STORY OR FEED ITEMS
-  public async loadMoreStatusScrollerItems(
-    authToken: AuthToken,
-    userAlias: string,
-    pageSize: number,
-    lastItem: Status | null,
-  ): Promise<[Status[], boolean]> {
-    // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
+    const request: PagedStatusRequest = {
+      token: authToken.token,
+      userAlias: userAlias,
+      pageSize: pageSize,
+      lastItem: lastItem ? lastItem.dto : null,
+    };
+    return new ServerFacade().loadMoreStoryItems(request);
   }
 
   public async postStatus(
