@@ -4,6 +4,12 @@ import { Service } from "./Service";
 import { ServerFacade } from "./net/ServerFacade";
 
 export class UserService implements Service {
+  private readonly serverFacade: ServerFacade;
+
+  public constructor() {
+    this.serverFacade = new ServerFacade();
+  }
+
   public async getUser(
     authToken: AuthToken,
     alias: string,
@@ -12,7 +18,7 @@ export class UserService implements Service {
       token: authToken.token,
       alias: alias,
     };
-    return new ServerFacade().getUser(request);
+    return this.serverFacade.getUser(request);
   }
 
   public async login(
@@ -24,7 +30,7 @@ export class UserService implements Service {
       alias: alias,
       password: password,
     };
-    return new ServerFacade().login(request);
+    return this.serverFacade.login(request);
   }
 
   public async register(
@@ -47,13 +53,13 @@ export class UserService implements Service {
       userImageBytes: imageStringBase64,
       imageFileExtension: imageFileExtension,
     };
-    return new ServerFacade().register(request);
+    return this.serverFacade.register(request);
   }
 
   public async logout(authToken: AuthToken): Promise<void> {
     const request: LogoutRequest = {
       token: authToken.token,
     };
-    await new ServerFacade().logout(request);
+    await this.serverFacade.logout(request);
   }
 }

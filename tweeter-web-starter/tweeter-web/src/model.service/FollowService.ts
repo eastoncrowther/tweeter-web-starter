@@ -3,6 +3,12 @@ import { Service } from "./Service";
 import { ServerFacade } from "./net/ServerFacade";
 
 export class FollowService implements Service {
+  private readonly serverFacade: ServerFacade;
+
+  public constructor() {
+    this.serverFacade = new ServerFacade();
+  }
+
   public async loadMoreFollowees(
     authToken: AuthToken,
     userAlias: string,
@@ -15,7 +21,7 @@ export class FollowService implements Service {
       pageSize: pageSize,
       lastItem: lastItem ? lastItem.dto : null,
     };
-    return new ServerFacade().loadMoreFollowees(request);
+    return this.serverFacade.loadMoreFollowees(request);
   }
 
   public async loadMoreFollowers(
@@ -30,7 +36,7 @@ export class FollowService implements Service {
       pageSize: pageSize,
       lastItem: lastItem ? lastItem.dto : null,
     };
-    return new ServerFacade().loadMoreFollowers(request);
+    return this.serverFacade.loadMoreFollowers(request);
   }
 
   public async getIsFollowerStatus(
@@ -43,7 +49,7 @@ export class FollowService implements Service {
       user: user.dto,
       selectedUser: selectedUser.dto,
     };
-    return new ServerFacade().getIsFollowerStatus(request);
+    return this.serverFacade.getIsFollowerStatus(request);
   }
 
   public async getFolloweeCount(
@@ -54,7 +60,7 @@ export class FollowService implements Service {
       token: authToken.token,
       user: user.dto,
     };
-    return new ServerFacade().getFolloweeCount(request);
+    return this.serverFacade.getFolloweeCount(request);
   }
 
   public async getFollowerCount(
@@ -65,7 +71,7 @@ export class FollowService implements Service {
       token: authToken.token,
       user: user.dto,
     };
-    return new ServerFacade().getFollowerCount(request);
+    return this.serverFacade.getFollowerCount(request);
   }
 
   public async follow(
@@ -76,7 +82,7 @@ export class FollowService implements Service {
       token: authToken.token,
       user: userToFollow.dto,
     };
-    return new ServerFacade().follow(request);
+    return this.serverFacade.follow(request);
   }
 
   public async unfollow(
@@ -87,6 +93,6 @@ export class FollowService implements Service {
       token: authToken.token,
       user: userToUnfollow.dto,
     };
-    return new ServerFacade().unfollow(request);
+    return this.serverFacade.unfollow(request);
   }
 }
