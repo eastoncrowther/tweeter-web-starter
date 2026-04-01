@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: SAM Template for Tweeter Milestone 3
+Description: SAM Template for Tweeter Milestone 4
 
 Globals:
   Function:
-    Timeout: 10
+    Timeout: 30
     Runtime: nodejs18.x
     MemorySize: 256
     Tracing: Active
@@ -20,6 +20,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: GetFollowerCountHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         GetFollowerCountApi:
           Type: Api
@@ -32,6 +35,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: GetFolloweeCountHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         GetFolloweeCountApi:
           Type: Api
@@ -44,6 +50,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: LoginHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         LoginApi:
           Type: Api
@@ -56,6 +65,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: RegisterHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         RegisterApi:
           Type: Api
@@ -68,6 +80,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: FollowHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         FollowApi:
           Type: Api
@@ -80,6 +95,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: UnfollowHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         UnfollowApi:
           Type: Api
@@ -92,6 +110,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: PostStatusHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         PostStatusApi:
           Type: Api
@@ -104,6 +125,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: LogoutHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         LogoutApi:
           Type: Api
@@ -116,6 +140,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: IsFollowerHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         IsFollowerApi:
           Type: Api
@@ -128,6 +155,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: GetFollowersHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         GetFollowersApi:
           Type: Api
@@ -140,6 +170,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: GetUserHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         GetUserApi:
           Type: Api
@@ -152,6 +185,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: GetFolloweesHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         GetFolloweesApi:
           Type: Api
@@ -164,6 +200,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: GetFeedHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         GetFeedApi:
           Type: Api
@@ -176,6 +215,9 @@ Resources:
     Properties:
       CodeUri: dist/
       Handler: GetStoryHandler.handler
+      Policies:
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
       Events:
         GetStoryApi:
           Type: Api

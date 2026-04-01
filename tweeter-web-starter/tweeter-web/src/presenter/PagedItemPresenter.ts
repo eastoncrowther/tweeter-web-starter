@@ -55,15 +55,24 @@ export abstract class PagedItemPresenter<
     return this.userService.getUser(authToken, alias);
   }
 
-  public async loadMoreItems(authToken: AuthToken, userAlias: string) {
-    this.doFailureReportingOperation(async () => {
-      const [newItems, hasMore] = await this.getMoreItems(authToken, userAlias);
+  private isLoading = false;
 
-      this.hasMoreItems = hasMore;
-      this.lastItem =
-        newItems.length > 0 ? newItems[newItems.length - 1] : null;
-      this.view.addItems(newItems);
-    }, this.itemDescription());
+  public async loadMoreItems(authToken: AuthToken, userAlias: string) {
+    if (this.isLoading) return;
+    this.isLoading = true;
+
+    try {
+      await this.doFailureReportingOperation(async () => {
+        const [newItems, hasMore] = await this.getMoreItems(authToken, userAlias);
+
+        this.hasMoreItems = hasMore;
+        this.lastItem =
+          newItems.length > 0 ? newItems[newItems.length - 1] : null;
+        this.view.addItems(newItems);
+      }, this.itemDescription());
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   protected abstract itemDescription(): string;

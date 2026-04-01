@@ -1,5 +1,6 @@
 import { GetUserRequest, GetUserResponse } from "tweeter-shared";
 import { UserService } from "../model/service/UserService";
+import { DynamoDAOFactory } from "../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (event: any): Promise<any> => {
   try {
@@ -9,8 +10,7 @@ export const handler = async (event: any): Promise<any> => {
       throw new Error("[Bad Request] Missing required fields");
     }
 
-
-    const userService = new UserService();
+    const userService = new UserService(new DynamoDAOFactory());
     const user = await userService.getUser(request.token, request.alias);
 
     const responseData: GetUserResponse = {
@@ -35,25 +35,23 @@ export const handler = async (event: any): Promise<any> => {
     if (error instanceof Error && error.message.includes("[Bad Request]")) {
       return {
         statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-          success: false,
-          message: error.message,
-        }),
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({ success: false, message: error.message }),
+      };
+    }
+
+    if (error instanceof Error && error.message.includes("[Unauthorized]")) {
+      return {
+        statusCode: 403,
+        headers: { "Access-Control-Allow-Origin": "*" },
+        body: JSON.stringify({ success: false, message: error.message }),
       };
     }
 
     return {
       statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: JSON.stringify({
-        success: false,
-        message: "Internal server error occurred.",
-      }),
+      headers: { "Access-Control-Allow-Origin": "*" },
+      body: JSON.stringify({ success: false, message: "Internal server error occurred." }),
     };
   }
 };
